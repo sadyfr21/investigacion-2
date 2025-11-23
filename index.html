@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Documento del participante: Respuesta a incidentes web</title>
+
+  <!-- Tipografía -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;   /* azul */
+      --accent-2: #14b8a6; /* teal */
+      --border: #e5e7eb;
+      --ring: rgba(37,99,235,0.18);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(15,23,42,0.08);
+    }
+
+    /* Base */
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Encabezado */
+    header{
+      padding: 48px 20px 18px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .title{
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.2vw, 3rem);
+      letter-spacing: -0.02em;
+      margin: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle{
+      margin: 10px auto 0;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+
+    /* Barra meta */
+    .meta{
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; align-items: center;
+      margin: 18px 0 0;
+    }
+    .chip{
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .chip[contenteditable="true"]{
+      outline: none;
+    }
+
+    /* Contenedor */
+    .container{
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Secciones en tarjetas */
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+    .card{
+      grid-column: span 12;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .card-head{
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 18px 6px;
+    }
+    .icon{
+      width: 40px; height: 40px; border-radius: 12px;
+      display: grid; place-items: center; font-weight: 800;
+      background: linear-gradient(135deg, rgba(37,99,235,0.15), rgba(20,184,166,0.15));
+      color: #0f172a;
+    }
+    .card-title{
+      font-weight: 800; font-size: 1.2rem; letter-spacing: -0.01em;
+    }
+    .card-body{ padding: 8px 18px 18px; }
+    .lead{ color: var(--muted); margin-bottom: 10px; }
+
+    /* Campos editables (contenido del informe) */
+    .editable{
+      background: #fbfdff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      min-height: 130px;
+      outline: none;
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+    .editable:focus{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    /* Lista rápida de puntos guía */
+    .bullets{
+      display: grid; gap: 6px;
+      margin: 12px 0 10px;
+    }
+    .bullet{
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 8px 10px; border: 1px dashed var(--border);
+      border-radius: 10px; background: #ffffff;
+    }
+    .bullet b{ color: #0f172a; }
+
+    /* Animación sutil de entrada */
+    .reveal{
+      opacity: 0; transform: translateY(12px);
+      animation: r .6s ease forwards;
+    }
+    .reveal:nth-child(1){ animation-delay: .06s; }
+    .reveal:nth-child(2){ animation-delay: .12s; }
+    .reveal:nth-child(3){ animation-delay: .18s; }
+    .reveal:nth-child(4){ animation-delay: .24s; }
+    .reveal:nth-child(5){ animation-delay: .30s; }
+    @keyframes r{ to{ opacity:1; transform:none; } }
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ opacity: 1; transform: none; animation: none; }
+    }
+
+    /* Barra de acciones */
+    .actions{
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; align-items: center;
+      margin: 8px 0 18px;
+    }
+    .btn{
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(15,23,42,0.08); }
+    .btn.primary{ background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; border: none; }
+    .btn.print{ background: #0ea5e9; color: white; border: none; }
+    .btn.reset{ background: #ef4444; color: white; border: none; }
+
+    footer{
+      text-align: center; color: var(--muted);
+      padding: 28px 24px 60px;
+    }
+
+    /* Estilos para impresión */
+    @media print{
+      .actions{ display:none; }
+      body{ background: white; }
+      .title{ color: #0f172a; background: none; -webkit-text-fill-color: inherit; }
+      .subtitle{ color: #334155; }
+      .card{ box-shadow: none; }
+      .editable{ background: white; border-color: #cbd5e1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">Documento del participante: Respuesta a incidentes web</h1>
+    <p class="subtitle">Completa cada sección con tu propio análisis y decisiones. Puedes guardar, cargar y exportar en PDF.</p>
+    <div class="meta" role="list" aria-label="Datos del participante">
+      <span class="chip">Participante:</span>
+      <span class="chip" contenteditable="true" aria-label="Nombre del participante">Nombre y apellido</span>
+      <span class="chip">Fecha:</span>
+      <span class="chip" contenteditable="true" aria-label="Fecha">DD/MM/AAAA</span>
+      <span class="chip">Versión:</span>
+      <span class="chip" contenteditable="true" aria-label="Versión">v1.0</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="actions">
+      <button class="btn primary" id="saveBtn">Guardar</button>
+      <button class="btn" id="loadBtn">Cargar</button>
+      <button class="btn print" onclick="window.print()">Imprimir/Exportar PDF</button>
+      <button class="btn reset" id="clearBtn">Limpiar</button>
+    </div>
+
+    <section class="grid">
+
+      <!-- Tipos de incidentes web -->
+      <article class="card reveal" id="tipos">
+        <div class="card-head">
+          <div class="icon">TI</div>
+          <div class="card-title">Tipos de incidentes web</div>
+        </div>
+        <div class="card-body">
+          <p class="lead">Clasifica por categoría y severidad. Incluye ejemplos y criterios de impacto.</p>
+          <div class="bullets">
+            <div class="bullet"><b>Ataques de aplicación:</b> XSS, inyección SQL, CSRF, RCE.</div>
+            <div class="bullet"><b>Control de acceso:</b> IDOR, escalamiento, exposición de datos.</div>
+            <div class="bullet"><b>Configuración:</b> secretos expuestos, CORS/CSP incorrectos.</div>
+            <div class="bullet"><b>Sesiones y auth:</b> fijación de sesión, tokens débiles, MFA ausente.</div>
+            <div class="bullet"><b>Disponibilidad:</b> DoS/DDoS, límites de recursos, timeouts.</div>
+          </div>
+          <div class="editable" contenteditable="true" aria-label="Describe tus tipos de incidentes">
+Escribe tus tipos, ejemplos reales, impacto y severidad (Crítico/Alto/Medio/Bajo).
+          </div>
+        </div>
+      </article>
+
+      <!-- Pasos de detección -->
+      <article class="card reveal" id="deteccion">
+        <div class="card-head">
+          <div class="icon">DE</div>
+          <div class="card-title">Pasos de detección</div>
+        </div>
+        <div class="card-body">
+          <p class="lead">Define señales, umbrales y evidencia necesaria para confirmar un incidente.</p>
+          <div class="bullets">
+            <div class="bullet"><b>Alertas técnicas:</b> WAF, IDS/IPS, SIEM, monitoreo de logs.</div>
+            <div class="bullet"><b>Indicadores en app:</b> picos 4xx/5xx, errores inusuales, payloads sospechosos.</div>
+            <div class="bullet"><b>Telemetría:</b> latencia, throughput, tasa de fallos y sesiones anómalas.</div>
+            <div class="bullet"><b>Validación:</b> reproducibilidad, triage y documentación del caso.</div>
+          </div>
+          <div class="editable" contenteditable="true" aria-label="Describe tu procedimiento de detección">
+Especifica umbrales, dashboards, responsables y qué evidencia se recolecta (logs, trazas, capturas).
+          </div>
+        </div>
+      </article>
+
+      <!-- Comunicación interna -->
+      <article class="card reveal" id="comunicacion">
+        <div class="card-head">
+          <div class="icon">CI</div>
+          <div class="card-title">Comunicación interna</div>
+        </div>
+        <div class="card-body">
+          <p class="lead">Establece roles, canales, frecuencia y plantillas de reporte.</p>
+          <div class="bullets">
+            <div class="bullet"><b>Roles:</b> incident owner, seguridad, dev, ops, legales.</div>
+            <div class="bullet"><b>Canales:</b> chat interno, correo, war room, tablero de estado.</div>
+            <div class="bullet"><b>Frecuencia:</b> actualizaciones cada 30–60 minutos.</div>
+            <div class="bullet"><b>Plantillas:</b> resumen ejecutivo, línea de tiempo y bloqueos.</div>
+          </div>
+          <div class="editable" contenteditable="true" aria-label="Define tu protocolo de comunicación">
+Redacta el mensaje mínimo viable: qué pasó, impacto, acciones en curso y próximos pasos. Indica criterios de escalación.
+          </div>
+        </div>
+      </article>
+
+      <!-- Contención, erradicación y recuperación -->
+      <article class="card reveal" id="cer">
+        <div class="card-head">
+          <div class="icon">CR</div>
+          <div class="card-title">Contención, erradicación y recuperación</div>
+        </div>
+        <div class="card-body">
+          <p class="lead">Planifica acciones inmediatas, permanentes y retorno seguro a operación.</p>
+          <div class="bullets">
+            <div class="bullet"><b>Contención:</b> bloquear IP/patrones, desactivar features, modo lectura, aislamiento.</div>
+            <div class="bullet"><b>Erradicación:</b> parches, rotación de credenciales, limpieza de artefactos, hardening.</div>
+            <div class="bullet"><b>Recuperación:</b> restaurar backups, pruebas de regresión, monitoreo reforzado, postmortem.</div>
+          </div>
+          <div class="editable" contenteditable="true" aria-label="Define tu plan C-E-R">
+Detalla criterios de éxito, tiempos, rollback, ventanas y responsables por fase. Añade métricas de verificación.
+          </div>
+        </div>
+      </article>
+
+      <!-- Recomendaciones finales -->
+      <article class="card reveal" id="recomendaciones">
+        <div class="card-head">
+          <div class="icon">RF</div>
+          <div class="card-title">Recomendaciones finales</div>
+        </div>
+        <div class="card-body">
+          <p class="lead">Propón mejoras preventivas, técnicas y organizacionales.</p>
+          <div class="bullets">
+            <div class="bullet"><b>Seguridad por defecto:</b> validación en servidor, encoding contextual, CSP, HTTPS.</div>
+            <div class="bullet"><b>Gestión de secretos:</b> vault, rotación, menor privilegio, auditoría.</div>
+            <div class="bullet"><b>Observabilidad:</b> logs estructurados, trazas, alertas y runbooks.</div>
+            <div class="bullet"><b>Pruebas y capacitación:</b> pentest, SAST/DAST, code reviews y simulacros.</div>
+          </div>
+          <div class="editable" contenteditable="true" aria-label="Escribe tus recomendaciones finales">
+Define un roadmap con responsables, plazos y KPIs. Prioriza quick wins y fija hitos trimestrales.
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <div class="actions">
+      <button class="btn primary" id="saveBtn2">Guardar</button>
+      <button class="btn" id="loadBtn2">Cargar</button>
+      <button class="btn print" onclick="window.print()">Imprimir/Exportar PDF</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>Personaliza colores en :root, agrega tu logo y ajusta el contenido según el curso o proyecto.</p>
+  </footer>
+
+  <script>
+    // Persistencia ligera en localStorage para todos los campos editables
+    (function(){
+      const KEY = 'docParticipanteIncidentes_v1';
+      const editables = () => document.querySelectorAll('[contenteditable="true"]');
+      const state = () => Array.from(editables()).map(n => n.innerHTML);
+
+      function save(){
+        try{
+          localStorage.setItem(KEY, JSON.stringify(state()));
+          toast('Contenido guardado.');
+        }catch(e){ toast('No se pudo guardar.'); }
+      }
+
+      function load(){
+        try{
+          const raw = localStorage.getItem(KEY);
+          if(!raw){ toast('No hay contenido previo.'); return; }
+          const data = JSON.parse(raw);
+          const nodes = editables();
+          data.forEach((html, i) => { if(nodes[i]) nodes[i].innerHTML = html; });
+          toast('Contenido cargado.');
+        }catch(e){ toast('No se pudo cargar.'); }
+      }
+
+      function clearAll(){
+        editables().forEach(n => {
+          const placeholder = n.getAttribute('aria-label');
+          n.innerHTML = placeholder || '';
+        });
+        localStorage.removeItem(KEY);
+        toast('Contenido limpiado.');
+      }
+
+      function toast(msg){
+        let t = document.getElementById('toast');
+        if(!t){
+          t = document.createElement('div');
+          t.id = 'toast';
+          t.style.position = 'fixed';
+          t.style.bottom = '20px';
+          t.style.left = '50%';
+          t.style.transform = 'translateX(-50%)';
+          t.style.padding = '10px 14px';
+          t.style.background = '#111827';
+          t.style.color = '#ffffff';
+          t.style.borderRadius = '10px';
+          t.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
+          t.style.zIndex = '1000';
+          document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.style.opacity = '1';
+        t.style.transition = 'opacity .3s ease';
+        setTimeout(()=>{ t.style.opacity = '0'; }, 1800);
+      }
+
+      document.getElementById('saveBtn')?.addEventListener('click', save);
+      document.getElementById('loadBtn')?.addEventListener('click', load);
+      document.getElementById('saveBtn2')?.addEventListener('click', save);
+      document.getElementById('loadBtn2')?.addEventListener('click', load);
+      document.getElementById('clearBtn')?.addEventListener('click', clearAll);
+    })();
+  </script>
+</body>
+</html>
+
+
